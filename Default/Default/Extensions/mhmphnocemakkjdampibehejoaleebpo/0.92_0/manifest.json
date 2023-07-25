@@ -1,0 +1,45 @@
+{
+   "background": {
+      "persistent": false,
+      "scripts": [ "jquery.js", "background.js" ]
+   },
+   "browser_action": {
+      "default_icon": {
+         "128": "images/icon-128x128.png",
+         "16": "images/icon-16x16.png",
+         "256": "images/icon-256x256.png",
+         "32": "images/icon-32x32.png",
+         "48": "images/icon-48x48.png"
+      },
+      "default_popup": "ui.html"
+   },
+   "content_scripts": [ {
+      "js": [ "content.js" ],
+      "matches": [ "https://*/*", "http://*/*" ],
+      "run_at": "document_start"
+   }, {
+      "js": [ "afterpage.js" ],
+      "matches": [ "https://*/*", "http://*/*" ],
+      "run_at": "document_end"
+   } ],
+   "content_security_policy": "default-src 'self'; script-src 'self' 'wasm-eval'; style-src 'unsafe-inline'; connect-src *; img-src data:;",
+   "description": "Allow users to easily play their favorite SWF Game Content",
+   "developer": {
+      "name": "Tactics Technology LLC"
+   },
+   "icons": {
+      "128": "images/icon-128x128.png",
+      "16": "images/icon-16x16.png",
+      "32": "images/icon-32x32.png",
+      "48": "images/icon-48x48.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA35r4s4wXn2SjKMBXQ1xa3wICWmGKMrHb6D+Y8u8yQ+wS6/w9c//PkNmytehok/fUhXw2rNI7RGWp8AW1HlZ6h6w/yzvM+yRlZXZk/NAz7xpMuvN3F1ZXUM4n+I173mHQXOoAVBgsAWOU2bCmVl+qq/4HzG05ydkFqUBaVdzZgcPpnT7bsvRhNgTt27+gdxEkINcJWmH2DbYQJ/CtqvBkzg2IdvWvZ4qufJtT4y/xFQiTh+k0rT4yCJqyUso8Q+z08x7dLwqq6/Yhlkp64FNxOC7zH6a/hCFio8xmpLZBJmyMJkRJsnouMWFt84gozRgh/vDqPX57F3UtGY9tJXmenQIDAQAB",
+   "manifest_version": 2,
+   "name": "SuperNova SWF Enabler",
+   "options_page": "options.html",
+   "permissions": [ "storage", "activeTab", "tabs", "nativeMessaging" ],
+   "short_name": "SuperNova",
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "0.92",
+   "web_accessible_resources": [ "enabler.html", "ui.html", "supernovalauncher.js", "ruffle/ruffle.js", "ruffle/662.js", "ruffle/966.js", "ruffle/533d00859b2aae889211.wasm", "ruffle/b976dc655b2bd48d362e.wasm" ]
+}
