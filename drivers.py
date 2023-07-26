@@ -21,17 +21,22 @@ from selenium.webdriver.common.keys import Keys
 #from advanced_selenium_options import Chrome, By
 driver = None
 
-def open_browser(url,profile, path, headless=False):
+def open_browser_1(url,profile, path, headless=False):
   global driver
   options = uc.ChromeOptions()
   #profile = "C:/Users/Public/Public Documents/Chrome_details/Default"
-  #path = "C:/Users/Public/Public Documents/Chrome_details/chromedriver_7.exe"
+  #path = "C:/Users/Public/Public Documents/Chrome_details/chromedriver.exe"
   options.user_data_dir = profile
   driver = uc.Chrome(use_subprocess=True, options=options, executable_path=path, headless = headless)
   print(url)
   driver.get(url)
   print("got it now.")
-  
+
+def open_browser(url, profile, path, headless=False):
+    global driver
+    #uc.TARGET_VERSION=109
+    driver = uc.Chrome(use_subprocess=True,version_main=109)
+    driver.get(url)
 def get_time():
   e = WebDriverWait(driver,10).until(EC.presence_of_element_located((By.CLASS_NAME, "account_time-value")))
   #print("in file", convert_time_to_epoch(e.text))
