@@ -95,38 +95,47 @@ def check_prices():
   t = get_time()
   print("checking now")
   stocks = driver.find_elements(By.CLASS_NAME, "market-list_group")
+  if len(stocks)<2:#must be at midnight turned off for now
+    keep_awake()
+    time.sleep(120)
+    return check_prices()
   data = {}
   data[t] = {}
-  for i in range(2):  #only do 2 stocks for now.  range(len(stocks)):
-    s = stocks[i]
-    text = s.text
-  #for s in stocks:
-    print(s.text)
-    s.click()
-    keep_awake_fast()
-    content = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "market-list_content")))
-    #print(len(content.text))
-    if len(content.text) < 40:
-      time.sleep(.1)
-      content = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "market-list_content")))
-    data[t]= parse_data(content.text,text,data[t])
-    #print("I found it.  It is: ")
-    #print(t)
-    #print("now it's done")
-    #time.sleep(3)
-    s = driver.find_elements(By.CLASS_NAME, "market-list_heading")[i]
-    #s = stocks[i]
-    s.click()
-    try:
-      keep_awake_fast()
-      WebDriverWait(driver, 3).until_not(EC.presence_of_element_located((By.CLASS_NAME, "market-list_content")))
+  try:
+      for i in range(2):  #only do 2 stocks for now.  range(len(stocks)):
+        s = stocks[i]
+        text = s.text
+      #for s in stocks:
+        print(s.text)
+        s.click()
+        keep_awake_fast()
+        content = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "market-list_content")))
+        #print(len(content.text))
+        if len(content.text) < 40:
+          time.sleep(.1)
+          content = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "market-list_content")))
+        data[t]= parse_data(content.text,text,data[t])
+        #print("I found it.  It is: ")
+        #print(t)
+        #print("now it's done")
+        #time.sleep(3)
+        s = driver.find_elements(By.CLASS_NAME, "market-list_heading")[i]
+        #s = stocks[i]
+        s.click()
+        try:
+          keep_awake_fast()
+          WebDriverWait(driver, 3).until_not(EC.presence_of_element_located((By.CLASS_NAME, "market-list_content")))
+        except:
+          s.click()
+          WebDriverWait(driver, 3).until_not(EC.presence_of_element_located((By.CLASS_NAME, "market-list_content")))
+        #time.sleep(3)
+        stocks = driver.find_elements(By.CLASS_NAME, "market-list_group")
+        
+      return data
     except:
-      s.click()
-      WebDriverWait(driver, 3).until_not(EC.presence_of_element_located((By.CLASS_NAME, "market-list_content")))
-    #time.sleep(3)
-    stocks = driver.find_elements(By.CLASS_NAME, "market-list_group")
-    
-  return data
+        keep_wake()
+        time.sleep(60)
+        return check_prices
 
 
 
