@@ -165,8 +165,9 @@ def keep_awake_fast():  #can call this funtion and it won't take much time.  Nee
         mouse_location = curr
         return
 
-    pyautogui.moveTo((curr[0],curr[1]+5*direction))
+    pyautogui.moveTo((curr[0] + 5*direction,curr[1]+5*direction))
     curr = pyautogui.position()
+    pyautogui.press('shift')
     steps -=1
     if steps ==0:
         steps = 50
