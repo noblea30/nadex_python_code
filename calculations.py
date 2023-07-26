@@ -76,10 +76,13 @@ def convert_time_to_epoch(input_string):
     time_str, am_pm = input_string.split('(')[0].strip().split()
     hour, minute, second = map(int, time_str.split(':'))
     is_pm = am_pm.lower() == 'pm'
-
+    print(time_str, am_pm)
+    print(hour, minute, second)
+    print(is_pm)
     # Get the current GMT time
     current_gmt_time = datetime.now(timezone.utc)
-
+    if hour ==12:
+        hour = 0 #if PM, needs to be 0 + 12.  IF AM, needs to be 0.  next line only adds 12 if PM.
     # Calculate the corresponding GMT time for the provided ET time
     et_datetime = current_gmt_time.replace(hour=hour + 12 if is_pm else hour, minute=minute, second=second)
 

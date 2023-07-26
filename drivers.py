@@ -7,6 +7,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
+import pyautogui
 #from data_storage import *
 #from selenium import webdriver
 #from selenium.webdriver.common.by import By
@@ -38,10 +39,17 @@ def open_browser_1(url, profile, path, headless=False):
     driver = uc.Chrome(use_subprocess=True,version_main=108)
     driver.get(url)
 def get_time():
-  e = WebDriverWait(driver,10).until(EC.presence_of_element_located((By.CLASS_NAME, "account_time-value")))
+  try:
+        e = WebDriverWait(driver,10).until(EC.presence_of_element_located((By.CLASS_NAME, "account_time-value")))
+  except:
+        print("oops, it's not there")
+        while 1:
+            pass
   #print("in file", convert_time_to_epoch(e.text))
   #print(e.text)
+
   return convert_time_to_epoch(e.text)
+
 
 
 def login_real():
@@ -68,6 +76,7 @@ def login_real():
   pw.send_keys("Ha52ss!!")
   pw.send_keys(Keys.ENTER)
   print("should be good now")
+
 
 
 def open_stocks():
@@ -118,3 +127,46 @@ def check_prices():
   return data
 
 
+
+
+direction  = 1
+mouse_location =  pyautogui.position()
+steps = 50
+curr = pyautogui.position()
+def keep_awake():
+    #return
+    global direction
+    global mouse_location
+    curr = pyautogui.position()
+    if mouse_location != curr:  #I must have moved it.  dont' do anything
+        mouse_location = curr
+        return
+    #prev = curr
+    for i in range(0,50):
+        pyautogui.moveTo((curr[0],curr[1]+direction*i*5))
+        curr = pyautogui.position()
+        time.sleep(.1)
+        if pyautogui.position() != curr:
+            return
+    direction *= -1
+    for i in range(0,3):
+        pyautogui.press('shift')
+    mouse_location = curr
+
+def keep_awake_fast():  #can call this funtion and it won't take much time.  Need to call it often though.
+    global direction
+    global mouse_location
+    global steps
+    global curr
+    curr = pyautogui.position()
+    if mouse_location !=curr:
+        mouse_location = curr
+        return
+
+    pyautogui.moveTo((curr[0],curr[1]+5*direction))
+    curr = pyautogui.position()
+    steps -=1
+    if steps ==0:
+        steps = 50
+        direction *= -1
+    
