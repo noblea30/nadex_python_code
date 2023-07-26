@@ -132,7 +132,7 @@ def check_prices():
         stocks = driver.find_elements(By.CLASS_NAME, "market-list_group")
         
       return data
-    except:
+   except:
         keep_wake()
         time.sleep(60)
         return check_prices
