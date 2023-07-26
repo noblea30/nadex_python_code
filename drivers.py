@@ -68,8 +68,7 @@ def login_real():
   pw.send_keys("Ha52ss!!")
   pw.send_keys(Keys.ENTER)
   print("should be good now")
-  while 1:
-    pass
+
 
 def open_stocks():
   #just opens the 5 minute forex to allow gathering data.
