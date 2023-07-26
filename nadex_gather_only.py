@@ -19,7 +19,7 @@ print(t)
 open_stocks()
 t1 = time.time()
 while 1:
-   for i in range(5):  #this loop is just for keep awake.
+   for i in range(1):  #this loop is just for keep awake.
       t1 = time.time()
       data = check_prices()
       
