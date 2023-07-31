@@ -9,10 +9,14 @@ import time
 open_browser(url, profile, path, headless)
 
 
-login_real()
+
+
+#login_real()
 
 #time.sleep(3)
+
 t = get_time()
+
 #t = convert_time_to_epoch(t_str)
 print(t)
 

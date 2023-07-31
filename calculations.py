@@ -71,14 +71,14 @@ def is_daylight_saving_time(date):
     return dst_start <= date < dst_end
 
 def convert_time_to_epoch(input_string):
-    print(input_string)
+    #print(input_string)
     # Parse the input string to extract time information and determine if it's AM or PM
     time_str, am_pm = input_string.split('(')[0].strip().split()
     hour, minute, second = map(int, time_str.split(':'))
     is_pm = am_pm.lower() == 'pm'
-    print(time_str, am_pm)
-    print(hour, minute, second)
-    print(is_pm)
+    #print(time_str, am_pm)
+    #print(hour, minute, second)
+    #print(is_pm)
     # Get the current GMT time
     current_gmt_time = datetime.now(timezone.utc)
     if hour ==12:
@@ -113,3 +113,23 @@ def get_current_day_month_year():
     return current_day, current_month, current_year
 
 #print(get_current_day_month_year())
+
+def determine_win_loose(data, bought):
+    ret = 0
+    for d in data:
+        for name in bought:
+            for t in data[d][name]:
+                final = data[d][name][t]["values"][0]
+                for tick in bought[name]:
+                    num = bought[name][tick]
+                    result = 0
+                    if (num >0 and final > tick) or (num<0 and final < tick):
+                        ret += 99
+    return ret
+  
+                    
+                    
+                    
+                        
+   
+       

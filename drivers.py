@@ -43,8 +43,7 @@ def get_time():
         e = WebDriverWait(driver,10).until(EC.presence_of_element_located((By.CLASS_NAME, "account_time-value")))
   except:
         print("oops, it's not there")
-        while 1:
-            pass
+        return get_time()
   #print("in file", convert_time_to_epoch(e.text))
   #print(e.text)
 
@@ -83,7 +82,7 @@ def open_stocks():
   #just opens the 5 minute forex to allow gathering data.
   pass
   #click 5 minute (that's all I guess.)
-  element = WebDriverWait(driver,10).until(EC.presence_of_element_located((By.PARTIAL_LINK_TEXT, "5 MINUTE")))
+  element = WebDriverWait(driver,5*60).until(EC.presence_of_element_located((By.PARTIAL_LINK_TEXT, "5 MINUTE")))
   element.click()
   time.sleep(4) 
   print("it's open")
@@ -93,7 +92,7 @@ def check_prices():
   #return all values along with the time.
   pass
   t = get_time()
-  print("checking now")
+  #print("checking now")
   stocks = driver.find_elements(By.CLASS_NAME, "market-list_group")
   if len(stocks)<2:#must be at midnight turned off for now
     keep_awake()
@@ -106,7 +105,7 @@ def check_prices():
         s = stocks[i]
         text = s.text
       #for s in stocks:
-        print(s.text)
+        #print(s.text)
         s.click()
         keep_awake_fast()
         content = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "market-list_content")))
@@ -138,7 +137,62 @@ def check_prices():
         return check_prices
 
 
-
+def get_second_level_price(buy, name, tick):
+    #opens the ticket, gets last minute price and waits.
+     #click stock name
+    tick_ind = -1*tick+3 
+     
+    index = -100
+    if buy == -1:
+        index = 1  #get the index 2 instead of -1 to click on the element
+    elif buy ==1:
+        index = 2
+    else:
+        print("error, why am I buying this? ", buy, name, tick)
+        while 1:
+            pass
+    stocks = driver.find_elements(By.CLASS_NAME, "market-list_group")
+    for s in stocks:
+        if name in s.text:
+            s.click()
+        else:
+            #print("." + s.text + ".")
+            pass
+    
+    #click ticket (buy or sell)
+        content = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "market-list_content")))
+        #print(len(content.text))
+        if len(content.text) < 40:
+            time.sleep(.1)
+            content = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "market-list_content")))
+        ticks =content.find_elements(By.CLASS_NAME, "market-list_item")
+        #e = content.find_element(By.XPATH, f"./content[{tick+3}]/element[2][1]")
+        e = content.find_element(By.XPATH, f"./dd[{tick_ind}]/div[2]/a[{index}]")
+        #/html/body/div[1]/div[3]/div[1]/div/div[2]/div[1]/section[2]/div/div[2]/div/div[1]/div[2]/div/dd[3]/div[2]/a[1]
+        #/html/body/div[1]/div[3]/div[1]/div/div[2]/div[1]/section[2]/div/div[2]/div/div[1]/div[2]/div
+        #print(e.text)
+        ret = e.text
+        e.click()
+        
+        
+        try:
+            button_element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, 'button.btn.btn--primary.enabled[type="submit"]')))
+            button_element.click()
+        except:
+            print("never found it")
+            return -1
+        time.sleep(2)
+        #print("closing stuff now")
+        stocks = driver.find_elements(By.CLASS_NAME, "market-list_heading")
+        #s = driver.find_elements(By.CLASS_NAME, "market-list_heading")[i]
+        for s in stocks:
+            if name in s.text:
+                s.click() #close the ticks
+        e = driver.find_element(By.CLASS_NAME, "ticket_toggle-visibility")
+        e.click()  #tear off ticket
+        
+        return(ret)
+    #find value
 
 direction  = 1
 mouse_location =  pyautogui.position()
@@ -166,7 +220,7 @@ def keep_awake():
 
 def keep_awake_fast():  #can call this funtion and it won't take much time.  Need to call it often though.
     global direction
-    global mouse_location
+    global mouse_location 
     global steps
     global curr
     curr = pyautogui.position()
