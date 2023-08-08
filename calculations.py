@@ -76,10 +76,6 @@ def convert_time_to_epoch(input_string):
     time_str, am_pm = input_string.split('(')[0].strip().split()
     hour, minute, second = map(int, time_str.split(':'))
     is_pm = am_pm.lower() == 'pm'
-    #print(time_str, am_pm)
-    #print(hour, minute, second)
-    #print(is_pm)
-    # Get the current GMT time
     current_gmt_time = datetime.now(timezone.utc)
     if hour ==12:
         hour = 0 #if PM, needs to be 0 + 12.  IF AM, needs to be 0.  next line only adds 12 if PM.
@@ -93,11 +89,10 @@ def convert_time_to_epoch(input_string):
     et_offset = timedelta(hours=-5)  # Eastern Time is UTC-5 (or UTC-4 during DST)
 
     # Convert the datetime from ET to UTC
-    utc_datetime = et_datetime - et_offset + timedelta(hours=is_dst)
+    utc_datetime = et_datetime - et_offset - timedelta(hours=is_dst)
 
     # Convert the UTC datetime to epoch time (seconds since January 1, 1970)
     epoch_time = int((utc_datetime - datetime(1970, 1, 1, tzinfo=timezone.utc)).total_seconds())
-
     return epoch_time
 
 
@@ -124,7 +119,8 @@ def determine_win_loose(data, bought):
                     num = bought[name][tick]
                     result = 0
                     if (num >0 and final > tick) or (num<0 and final < tick):
-                        ret += 99
+                        ret += num*99
+                        print("won 2")
     return ret
   
                     
